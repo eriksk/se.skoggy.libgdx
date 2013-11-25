@@ -32,7 +32,7 @@ public class ContentManager implements Disposable{
 		TextureRegion[] textures = new TextureRegion[texes.length * texes[0].length];
 		for (int i = 0; i < texes.length; i++) {
 			for (int j = 0; j < texes[i].length; j++) {
-				textures[count] = texes[j][i];
+				textures[count] = texes[i][j];
 				count++;
 			}
 		}
