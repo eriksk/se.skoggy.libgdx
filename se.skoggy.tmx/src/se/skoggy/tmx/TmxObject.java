@@ -9,8 +9,16 @@ public class TmxObject {
 	public String type;
 	public boolean visible;
 	public HashMap<String, String> properties;
-	
+
 	public TmxObject(){
 		properties = new HashMap<>();
+	}
+
+	public float getCenterX(){
+		return x + width * 0.5f;
+	}
+
+	public float getCenterY(){
+		return y + height * 0.5f;
 	}
 }
