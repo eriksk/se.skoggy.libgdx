@@ -14,13 +14,13 @@ public class TmxLayer {
 	public boolean visible;
 	public int x, y;
 	public HashMap<String, String> properties;
-	
+
 	public TmxLayer(){
 		data = new int[0];
 		objects = new ArrayList<TmxObject>();
 		properties = new HashMap<String, String>();
 	}
-	
+
 	public int getCell(int col, int row){
 		if(col < 0)
 			return 0;
@@ -31,5 +31,18 @@ public class TmxLayer {
 		if(row > height - 1)
 			return 0;
 		return data[col + row * width];
+	}
+
+	public void setCell(int col, int row, int value){
+		if(col < 0)
+			return;
+		if(row < 0)
+			return;
+		if(col > width - 1)
+			return;
+		if(row > height - 1)
+			return;
+
+		data[col + row * width] = value;
 	}
 }

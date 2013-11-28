@@ -11,14 +11,14 @@ import com.badlogic.gdx.audio.Sound;
 import se.skoggy.content.ContentManager;
 
 public class AudioManager {
-	
+
 	protected HashMap<String, Sound> sounds;
 	protected HashMap<String, Music> songs;
 	protected float soundVolume;
 	protected float musicVolume;
-	
+
 	private List<String> soundNames, songNames;
-	
+
 	public AudioManager(){
 		sounds = new HashMap<String, Sound>();
 		songs = new HashMap<String, Music>();
@@ -27,21 +27,21 @@ public class AudioManager {
 		soundVolume = 1f;
 		musicVolume = 1f;
 	}
-	
+
 	public void registerSound(String name){
 		soundNames.add(name);
 	}
-	
+
 	public void registerSong(String name){
 		songNames.add(name);
 	}
-	
+
 	private String getNameWithoutPath(String path){
 		String nameWithoutPath = path.substring(0, path.indexOf("."));
 		nameWithoutPath = nameWithoutPath.substring(nameWithoutPath.lastIndexOf("/") + 1);
 		return nameWithoutPath;
 	}
-	
+
 	/**
 	 * Loads preregistered audio
 	 * @param content
@@ -54,21 +54,22 @@ public class AudioManager {
 			songs.put(getNameWithoutPath(name), Gdx.audio.newMusic(Gdx.files.internal(name)));
 		}
 	}
-		
+
 	public void play(String name) {
 		sounds.get(name).play(soundVolume);
 	}
-	
-	public void playSong(String name){
+
+	public void playSong(String name, boolean loop){
 		songs.get(name).setVolume(musicVolume);
+		songs.get(name).setLooping(loop);
 		songs.get(name).play();
 	}
-	
+
 	public void pauseSong(String name){
-		songs.get(name).pause();		
+		songs.get(name).pause();
 	}
-	
+
 	public void stopSong(String name){
-		songs.get(name).stop();;	
+		songs.get(name).stop();;
 	}
 }
