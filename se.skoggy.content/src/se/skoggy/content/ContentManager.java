@@ -26,13 +26,13 @@ public class ContentManager implements Disposable{
 		return texture;
 	}
 
-	public TextureRegion[] loadTextureSheet(String name, int cols, int rows){
+	public TextureRegion[] loadTextureSheet(String name, int tileWidth, int tileHeight){
 		TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal(contentRoot + name + ".png")));
-		TextureRegion[][] texes = tex.split(cols,  rows);
+		TextureRegion[][] texes = tex.split(tileWidth, tileHeight);
 		int count = 0;
-		TextureRegion[] textures = new TextureRegion[texes.length * texes[0].length];
+		TextureRegion[] textures = new TextureRegion[texes.length * texes.length];
 		for (int i = 0; i < texes.length; i++) {
-			for (int j = 0; j < texes[i].length; j++) {
+			for (int j = 0; j < texes.length; j++) {
 				textures[count] = texes[i][j];
 				count++;
 			}
