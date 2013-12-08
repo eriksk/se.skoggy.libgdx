@@ -18,6 +18,10 @@ public class TimerTrig {
 		return false;
 	}
 
+	public void reset(){
+		current = 0f;
+	}
+
 	/**
 	 * Updates without trigging
 	 */
@@ -30,5 +34,9 @@ public class TimerTrig {
 
 	public void setToTrigNextTime(){
 		current = interval;
+	}
+
+	public float progress(){
+		return current > interval ? 1f : current / interval;
 	}
 }
