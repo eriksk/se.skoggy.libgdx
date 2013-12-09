@@ -6,11 +6,22 @@ import com.badlogic.gdx.math.Rectangle;
 public class Camera2D extends OrthographicCamera{
 
 	Rectangle area;
+	private float width, height;
 
 	public Camera2D(float width, float height, Rectangle area) {
 		super(width, height);
 		setToOrtho(true, width, height);
 		this.area = area;
+		this.width = width;
+		this.height = height;
+	}
+
+	public float toWorldX(float localX){
+		return position.x - ((width * 0.5f)* zoom) + localX * zoom;
+	}
+
+	public float toWorldY(float localY){
+ 		return position.y - ((height * 0.5f) * zoom) + localY * zoom;
 	}
 
 	@Override
