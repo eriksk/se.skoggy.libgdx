@@ -28,6 +28,10 @@ public class AudioManager {
 		musicVolume = 1f;
 	}
 
+	public void setSfxVolume(float soundVolume) {
+		this.soundVolume = soundVolume;
+	}
+
 	public void registerSound(String name){
 		soundNames.add(name);
 	}
@@ -57,6 +61,9 @@ public class AudioManager {
 
 	public void play(String name) {
 		sounds.get(name).play(soundVolume);
+	}
+	public void play(String name, float pitch) {
+		sounds.get(name).play(soundVolume, pitch, 0f);
 	}
 
 	public void playSong(String name, boolean loop){
