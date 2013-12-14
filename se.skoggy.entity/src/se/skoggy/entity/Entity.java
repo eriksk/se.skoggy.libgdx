@@ -5,6 +5,7 @@ import java.util.List;
 
 import se.skoggy.entity.Transform;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,11 +19,13 @@ public class Entity implements Disposable{
 	public Vector2 origin;
 	protected List<EntityBehavior> behaviors;
 	protected boolean flipX, flipY;
+	protected Color color;
 
 	public Entity(TextureRegion texture){
 		textureRegion = texture;
 		transform = new Transform();
 		origin = new Vector2();
+		color = new Color(1f, 1f, 1f, 1f);
 		flipX = false;
 		setSource(0,  0,  texture.getTexture().getWidth(),  texture.getTexture().getHeight());
 
@@ -68,6 +71,8 @@ public class Entity implements Disposable{
 	}
 
 	public void draw(SpriteBatch spriteBatch){
+		spriteBatch.setColor(color);
+
 		for (EntityBehavior b : behaviors) {
 			b.BeforeDraw(spriteBatch, this);
 		}
