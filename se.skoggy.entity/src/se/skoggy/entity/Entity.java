@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -19,7 +20,8 @@ public class Entity implements Disposable{
 	public Vector2 origin;
 	protected List<EntityBehavior> behaviors;
 	protected boolean flipX, flipY;
-	protected Color color;
+	public Color color;
+	private Rectangle region;
 
 	public Entity(TextureRegion texture){
 		textureRegion = texture;
@@ -27,6 +29,7 @@ public class Entity implements Disposable{
 		origin = new Vector2();
 		color = new Color(1f, 1f, 1f, 1f);
 		flipX = false;
+		region = new Rectangle();
 		setSource(0,  0,  texture.getTexture().getWidth(),  texture.getTexture().getHeight());
 
 		behaviors = new ArrayList<EntityBehavior>();
@@ -40,6 +43,11 @@ public class Entity implements Disposable{
 		behaviors.add(behavior);
 	}
 
+	public void teleport(float x, float y) {
+		transform.position.x = x;
+		transform.position.y = y;
+	}
+
 	public void setFlip(boolean x, boolean y){
 		this.flipX = x;
 		this.flipY = y;
@@ -47,6 +55,10 @@ public class Entity implements Disposable{
 		x = textureRegion.isFlipX() != x;
 		y = textureRegion.isFlipY() != y;
 		textureRegion.flip(x,  y);
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	public boolean isFlipX() {
@@ -62,6 +74,14 @@ public class Entity implements Disposable{
 		origin.x =  width * 0.5f;
 		origin.y = height * 0.5f;
 		textureRegion.flip(flipX,  true);
+		region.x = x;
+		region.y = y;
+		region.width = width;
+		region.height = height;
+	}
+
+	public Rectangle getSource() {
+		return region;
 	}
 
 	public void update(float dt){
@@ -92,5 +112,20 @@ public class Entity implements Disposable{
 		for (EntityBehavior b : behaviors) {
 			b.AfterDraw(spriteBatch, this);
 		}
+	}
+
+	public void drawWithoutBehaviors(SpriteBatch spriteBatch, Color colorOverride){
+		spriteBatch.setColor(colorOverride);
+		spriteBatch.draw(
+				textureRegion,
+				transform.position.x - origin.x,
+				transform.position.y - origin.y,
+				origin.x,
+				origin.y,
+				textureRegion.getRegionWidth(),
+				textureRegion.getRegionHeight(),
+				transform.scale.x,
+				transform.scale.y,
+				(float)(transform.rotation * 180f / Math.PI));
 	}
 }

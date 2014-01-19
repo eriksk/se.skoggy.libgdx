@@ -23,6 +23,15 @@ public class TimerTrig {
 	}
 
 	/**
+	 * Sets interval and resets the timertrig
+	 * @param interval
+	 */
+	public void setInterval(float interval) {
+		this.interval = interval;
+		reset();
+	}
+
+	/**
 	 * Updates without trigging
 	 */
 	public void update(float dt){

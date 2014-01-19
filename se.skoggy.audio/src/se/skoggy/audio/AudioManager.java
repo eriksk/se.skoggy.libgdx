@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 import se.skoggy.content.ContentManager;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class AudioManager {
 
@@ -16,6 +17,7 @@ public class AudioManager {
 	protected HashMap<String, Music> songs;
 	protected float soundVolume;
 	protected float musicVolume;
+	protected boolean muted;
 
 	private List<String> soundNames, songNames;
 
@@ -26,6 +28,12 @@ public class AudioManager {
 		songNames = new ArrayList<String>();
 		soundVolume = 1f;
 		musicVolume = 1f;
+		muted = false;
+	}
+
+	public void mute() {
+		muted = true;
+		throw new NotImplementedException();
 	}
 
 	public void setSfxVolume(float soundVolume) {
@@ -60,7 +68,9 @@ public class AudioManager {
 	}
 
 	public void play(String name) {
-		sounds.get(name).play(soundVolume);
+		Sound s = sounds.get(name);
+		s.stop();
+		s.play(soundVolume);
 	}
 	public void play(String name, float pitch) {
 		sounds.get(name).play(soundVolume, pitch, 0f);
