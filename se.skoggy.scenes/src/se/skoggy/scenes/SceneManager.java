@@ -29,27 +29,31 @@ public class SceneManager {
 		return !scenes.isEmpty();
 	}
 
+	public int getState() {
+		return state;
+	}
+
 	public boolean isTransitioningOut(){
 		return state == TRANSITION_OUT;
 	}
 
 	public void pushScene(Scene scene){
-		if(hasActiveScene()){
-			if(state != TRANSITION_OUT){
-				setState(TRANSITION_OUT);
-			}
-		}else{
-			activeScene = scene;
-		}
+		activeScene = scene;
 		scenes.add(scene);
 		scene.setSceneManager(this);
 		scene.initCam();
+		scene.load();
+		setState(TRANSITION_IN);
 	}
 
 	public void popScene(){
 		if(hasActiveScene()){
 			setState(TRANSITION_OUT);
 		}
+	}
+
+	public void clearScenes(){
+		scenes.clear();
 	}
 
 	protected void setState(int state){
@@ -64,7 +68,7 @@ public class SceneManager {
 			break;
 			case GOTO_NEXT_SCENE:
 				if(hasAnyScenes()){
-					activeScene = scenes.get(0);
+					activeScene = scenes.get(scenes.size() - 1); // take last scene
 					setState(TRANSITION_IN);
 				}
 				break;
@@ -76,7 +80,6 @@ public class SceneManager {
 		setState(ACTIVE);
 	}
 	protected void afterTransitionOut(){
-		removeLastScene();
 		setState(TRANSITION_IN);
 	}
 
@@ -127,17 +130,22 @@ public class SceneManager {
 		}
 	}
 
-	public void draw(SpriteBatch sb){
+	public void draw(){
 		if(hasActiveScene()){
+			if(activeScene.isPopup()){
+				// draw underlaying
+				// TODO: make safer
+				scenes.get(scenes.size() - 2).draw();
+			}
 			switch (state) {
 				case ACTIVE:
-					activeScene.draw(sb);
+					activeScene.draw();
 				break;
 				case TRANSITION_IN:
-					activeScene.drawTransitionIn(sb, currentProgress / activeScene.transitionInDuration());
+					activeScene.drawTransitionIn(currentProgress / activeScene.transitionInDuration());
 				break;
 				case TRANSITION_OUT:
-					activeScene.drawTransitionOut(sb, currentProgress / activeScene.transitionOutDuration());
+					activeScene.drawTransitionOut(currentProgress / activeScene.transitionOutDuration());
 				break;
 			}
 		}

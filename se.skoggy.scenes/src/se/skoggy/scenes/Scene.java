@@ -12,6 +12,8 @@ public abstract class Scene extends Stage{
 	protected SceneManager manager;
 	protected Camera2D cam;
 	protected float width, height;
+	protected SpriteBatch spriteBatch;
+	protected ContentManager content;
 
 	public Scene(float width, float height) {
 		super(width, height);
@@ -21,7 +23,7 @@ public abstract class Scene extends Stage{
 
 	protected abstract void initCam();
 	protected void createCam(Rectangle area){
-		setViewport(width, height);
+		setViewport(width, height, true);
 		cam = new Camera2D(width, height, area);
 		setCamera(cam);
 	}
@@ -33,7 +35,10 @@ public abstract class Scene extends Stage{
 	public abstract float transitionInDuration();
 	public abstract float transitionOutDuration();
 	public abstract boolean isPopup();
-	public abstract void load(ContentManager content);
+	public void load(){
+		content = new ContentManager("", true);
+		spriteBatch = new SpriteBatch();
+	}
 	public void update(float dt){
 		cam.update();
 	}
@@ -43,7 +48,7 @@ public abstract class Scene extends Stage{
 	public void updateTransitionOut(float dt, float progress){
 		cam.update();
 	}
-	public abstract void draw(SpriteBatch sb);
-	public abstract void drawTransitionIn(SpriteBatch sb, float progress);
-	public abstract void drawTransitionOut(SpriteBatch sb, float progress);
+	public abstract void draw();
+	public abstract void drawTransitionIn(float progress);
+	public abstract void drawTransitionOut(float progress);
 }
