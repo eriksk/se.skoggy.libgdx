@@ -33,11 +33,14 @@ public class AudioManager {
 
 	public void mute() {
 		muted = true;
-		throw new NotImplementedException();
 	}
 
 	public void setSfxVolume(float soundVolume) {
 		this.soundVolume = soundVolume;
+	}
+
+	public void setMusicVolume(float musicVolume) {
+		this.musicVolume = musicVolume;
 	}
 
 	public void registerSound(String name){
@@ -68,18 +71,30 @@ public class AudioManager {
 	}
 
 	public void play(String name) {
-		Sound s = sounds.get(name);
-		s.stop();
-		s.play(soundVolume);
+		if(!muted){
+			Sound s = sounds.get(name);
+			s.stop();
+			s.play(soundVolume);
+		}
 	}
 	public void play(String name, float pitch) {
-		sounds.get(name).play(soundVolume, pitch, 0f);
+		if(!muted){
+			sounds.get(name).play(soundVolume, pitch, 0f);
+		}
 	}
 
+	/**
+	 * Plays a song and stops any other currently playing, if this is the current song playing it will just continue
+	 * @param name
+	 * @param loop
+	 */
 	public void playSong(String name, boolean loop){
-		songs.get(name).setVolume(musicVolume);
-		songs.get(name).setLooping(loop);
-		songs.get(name).play();
+		if(!muted){
+			stopAllSongs();
+			songs.get(name).setVolume(musicVolume);
+			songs.get(name).setLooping(loop);
+			songs.get(name).play();
+		}
 	}
 
 	public void pauseSong(String name){
@@ -88,5 +103,13 @@ public class AudioManager {
 
 	public void stopSong(String name){
 		songs.get(name).stop();;
+	}
+
+	public void stopAllSongs(){
+		for (Music song : songs.values()) {
+			if(song.isPlaying()){
+				song.stop();
+			}
+		}
 	}
 }

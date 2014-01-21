@@ -38,6 +38,7 @@ public abstract class Scene extends Stage{
 	public void load(){
 		content = new ContentManager("", true);
 		spriteBatch = new SpriteBatch();
+		initCam();
 	}
 	public void update(float dt){
 		cam.update();

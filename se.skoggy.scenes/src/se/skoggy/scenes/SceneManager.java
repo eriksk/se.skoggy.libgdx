@@ -37,13 +37,17 @@ public class SceneManager {
 		return state == TRANSITION_OUT;
 	}
 
-	public void pushScene(Scene scene){
+	public void pushScene(Scene scene, boolean isPreloaded){
 		activeScene = scene;
 		scenes.add(scene);
 		scene.setSceneManager(this);
-		scene.initCam();
-		scene.load();
+		if(!isPreloaded)
+			scene.load();
 		setState(TRANSITION_IN);
+	}
+
+	public void pushScene(Scene scene){
+		pushScene(scene, false);
 	}
 
 	public void popScene(){
@@ -119,8 +123,13 @@ public class SceneManager {
 				break;
 				case TRANSITION_OUT:
 					if(currentProgress / activeScene.transitionOutDuration() > 1f){
+						boolean isPopup  = activeScene.isPopup();
 						removeActiveScene();
 						setState(GOTO_NEXT_SCENE);
+						if(isPopup){
+							// popup is removed so just continue the next scene
+							setState(ACTIVE);
+						}
 					}else{
 						activeScene.updateTransitionOut(dt, currentProgress / activeScene.transitionOutDuration());
 					}
